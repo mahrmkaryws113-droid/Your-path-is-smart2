@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مسارك الذكي | Smart Path</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-soft: #F1F5F9;
+      --primary: #0F766E;
+      --primary-dark: #115E59;
+      --primary-soft: #CCFBF1;
+      --text: #0F172A;
+      --muted: #64748B;
+      --border: #E2E8F0;
+      --success: #15803D;
+      --success-bg: #DCFCE7;
+      --danger: #B91C1C;
+      --danger-bg: #FEE2E2;
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      --radius: 16px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Kufi Arabic", "Cairo", sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .app-shell {
+      max-width: 780px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: right;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.25;
+    }
+
+    .brand-sub {
+      font-size: 0.72rem;
+      color: var(--primary);
+      font-weight: 700;
+      display: block;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .xp-pill {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border: 1px solid #99F6E4;
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .top-ai-btn {
+      background: var(--surface);
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .top-ai-btn:hover {
+      background: var(--surface-soft);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 16px 14px 96px;
+    }
+
+    .view-screen {
+      display: none;
+    }
+
+    .view-screen.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    .hero-card {
+      text-align: center;
+      padding: 24px 18px;
+    }
+
+    .hero-illustration {
+      width: 100%;
+      max-width: 300px;
+      height: 170px;
+      margin: 0 auto 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #F0FDFA 0%, #ECFEFF 100%);
+      border: 1px solid #CCFBF1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge-ring {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      background: #FFFFFF;
+      border: 2px solid #99F6E4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 8px 24px rgba(15, 118, 110, 0.12);
+    }
+
+    .hero-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .hero-desc {
+      font-size: 0.92rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 20px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--primary);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.98rem;
+      padding: 13px 18px;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.99);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: var(--surface);
+      color: var(--primary-dark);
+      border: 1.5px solid var(--primary);
+      font-weight: 700;
+      font-size: 0.94rem;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: #F0FDFA;
+    }
+
+    .btn-ghost {
+      background: var(--surface-soft);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 8px 13px;
+      border-radius: 10px;
+    }
+
+    .btn-ghost:hover {
+      background: #E2E8F0;
+    }
+
+    .section-head {
+      margin-bottom: 14px;
+    }
+
+    .step-label {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .section-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .domain-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-bottom: 16px;
+    }
+
+    .domain-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 15px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      text-align: right;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .domain-card:hover {
+      border-color: #99F6E4;
+    }
+
+    .domain-card.selected {
+      border-color: var(--primary);
+      background: #F0FDFA;
+    }
+
+    .domain-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .domain-ar {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--text);
+      display: block;
+    }
+
+    .domain-en {
+      font-size: 0.82rem;
+      color: var(--muted);
+      direction: ltr;
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    .domain-status-tag {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: var(--primary-soft);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .domain-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 13px;
+      background: var(--surface-soft);
+      color: var(--primary-dark);
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+
+    .domain-card.selected .domain-icon-box {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--surface-soft);
+      padding: 5px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .auth-tab {
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .auth-tab.active {
+      background: var(--surface);
+      color: var(--primary-dark);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    }
+
+    .form-group {
+      margin-bottom: 13px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .auth-feedback {
+      margin-top: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 11px 13px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .auth-feedback.show {
+      display: block;
+    }
+
+    .auth-feedback.ok {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .auth-feedback.err {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #FCA5A5;
+    }
+
+    .cloud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .cloud-pill.synced {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .dash-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+
+    .dash-tab {
+      padding: 9px 8px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .dash-tab.active {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .course-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    }
+
+    .course-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge-domain {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .course-pct {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .course-title {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .course-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-soft);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .filter-btn {
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .mission-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 13px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mission-toggle {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      text-align: right;
+      flex: 1;
+    }
+
+    .mission-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      border: 2px solid var(--primary);
+      display: grid;
+      place-items: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      background: #FFFFFF;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .mission-item.done .mission-check {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .mission-title {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--text);
+      display: block;
+    }
+
+    .mission-item.done .mission-title {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .mission-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 3px;
+      display: block;
+    }
+
+    .mission-xp {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .player-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .lesson-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .lesson-pill {
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .lesson-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .lesson-pill.completed {
+      border-color: #16A34A;
+      color: #15803D;
+    }
+
+    .video-stage {
+      background: #0F172A;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid #1E293B;
+      margin-bottom: 10px;
+    }
+
+    .video-stage.theater {
+      position: relative;
+    }
+
+    .video-frame-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #020617;
+    }
+
+    .video-stage.theater .video-frame-wrap {
+      padding-top: 68%;
+    }
+
+    .video-frame-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .quiz-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .quiz-q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 13px;
+      margin-bottom: 12px;
+    }
+
+    .quiz-q-title {
+      font-size: 0.93rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 9px;
+    }
+
+    .quiz-opt-btn {
+      width: 100%;
+      text-align: right;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 7px;
+      display: block;
+    }
+
+    .quiz-opt-btn:hover {
+      border-color: var(--primary);
+      background: #F0FDFA;
+    }
+
+    .quiz-opt-btn.picked {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+
+    .quiz-opt-btn.correct-ans {
+      border-color: #16A34A;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .quiz-opt-btn.wrong-ans {
+      border-color: #DC2626;
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 410px;
+      overflow-y: auto;
+      padding: 12px;
+      background: var(--surface-soft);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    .msg-bubble {
+      max-width: 88%;
+      padding: 11px 13px;
+      border-radius: 14px;
+      font-size: 0.89rem;
+      white-space: pre-line;
+    }
+
+    .msg-user {
+      align-self: flex-start;
+      background: var(--primary);
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    .msg-ai {
+      align-self: flex-end;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .quick-prompts {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .quick-chip {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      color: var(--primary-dark);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 11px;
+      border-radius: 999px;
+    }
+
+    .quick-chip:hover {
+      background: var(--primary-soft);
+    }
+
+    .chat-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-form input {
+      flex: 1;
+      padding: 11px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+    }
+
+    .chat-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .stat-box {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: block;
+    }
+
+    .stat-lbl {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+    }
+
+    .bottom-nav-inner {
+      width: 100%;
+      max-width: 780px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 6px 4px;
+    }
+
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 6px 4px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .nav-btn.active {
+      color: var(--primary-dark);
+      background: #F0FDFA;
+    }
+
+    .toast-banner {
+      position: fixed;
+      top: 66px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+      display: none;
+      max-width: 92vw;
+      text-align: center;
+    }
+
+    .toast-banner.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="toastBanner" class="toast-banner" role="status" aria-live="polite"></div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <button type="button" class="brand" data-action="go" data-view="welcome">
+        <span class="brand-mark">⚡</span>
+        <span>
+          <span class="brand-title">مسارك الذكي</span>
+          <span class="brand-sub">Smart Path</span>
+        </span>
+      </button>
+
+      <div class="topbar-actions">
+        <span class="xp-pill" id="topXpBadge">⚡ 0 XP</span>
+        <button type="button" class="top-ai-btn" data-action="go" data-view="ai">✨ المساعد</button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- 1. Welcome Screen -->
+      <section id="view-welcome" class="view-screen active">
+        <div class="card hero-card">
+          <div class="hero-illustration">
+            <div class="hero-badge-ring">🎓</div>
+          </div>
+          <h1 class="hero-title">مرحبًا بك في مسارك الذكي</h1>
+          <p class="hero-subtitle">ابدأ رحلتك التعليمية المخصصة اليوم</p>
+          <p class="hero-desc">
+            سجل دخولك أو أنشئ حسابًا جديدًا على سيرفر Firebase للوصول إلى الدورات، الشروحات المرئية، الكويزات التفاعلية، المهام العملية، والمساعد الذكي.
+          </p>
+          <button type="button" class="btn-primary" data-action="go" data-view="auth">تسجيل الدخول أو إنشاء حساب</button>
+          <button type="button" class="btn-secondary" data-action="go" data-view="interests">تصفح المجالات (يتطلب حساب)</button>
+        </div>
+      </section>
+
+      <!-- 2. Interests Selection Screen (9 Domains - Protected) -->
+      <section id="view-interests" class="view-screen">
+        <div class="section-head">
+          <span class="step-label">الخطوة 1 • تخصيص المجالات</span>
+          <h2 class="section-title">ما الذي تريد تعلّمه؟</h2>
+          <p class="section-desc">اختر المجالات التي تهمك (يمكنك اختيار أكثر من مجال) لنرشح لك الدورات الأنسب تلقائيًا.</p>
+        </div>
+
+        <div id="domainsContainer" class="domain-list"></div>
+
+        <button type="button" class="btn-primary" data-action="submit-interests">التالي ←</button>
+        <button type="button" class="btn-secondary" data-action="go" data-view="dashboard">العودة للوحتي</button>
+      </section>
+
+      <!-- 3. Auth Screen (Firebase Email Server) -->
+      <section id="view-auth" class="view-screen">
+        <div class="card">
+          <div class="section-head">
+            <span class="step-label">سيرفر الإيميلات • Firebase Auth & Firestore</span>
+            <h2 class="section-title">تسجيل الدخول أو إنشاء حساب</h2>
+            <p class="section-desc">يتم التحقق من البريد الإلكتروني وكلمة المرور مباشرة عبر سيرفر Firebase.</p>
+          </div>
+
+          <div class="auth-tabs">
+            <button type="button" id="tabLoginBtn" class="auth-tab active" data-action="auth-mode" data-mode="login">تسجيل الدخول</button>
+            <button type="button" id="tabRegisterBtn" class="auth-tab" data-action="auth-mode" data-mode="register">إنشاء حساب جديد</button>
+          </div>
+
+          <form id="authForm" novalidate>
+            <div class="form-group" id="nameFieldGroup" style="display:none;">
+              <label class="form-label" for="authNameInput">الاسم الكامل</label>
+              <input id="authNameInput" type="text" class="form-input" placeholder="مثال: مكاريوس ماهر" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="authEmailInput">البريد الإلكتروني</label>
+              <input id="authEmailInput" type="email" class="form-input" placeholder="student@example.com" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="authPassInput">كلمة المرور (6 أحرف أو أكثر)</label>
+              <input id="authPassInput" type="password" class="form-input" placeholder="••••••••" />
+            </div>
+
+            <button type="submit" id="authSubmitBtn" class="btn-primary">تسجيل الدخول</button>
+          </form>
+
+          <div id="authFeedback" class="auth-feedback"></div>
+        </div>
+      </section>
+
+      <!-- 4. Selected Courses Screen (Protected) -->
+      <section id="view-selected" class="view-screen">
+        <div class="section-head">
+          <span class="step-label">الدورات المرشحة لك</span>
+          <h2 class="section-title">الدورات المختارة</h2>
+          <p class="section-desc">دورات مرتبة بناءً على المجالات التي اخترتها. افتح أي دورة لبدء الفيديوهات والكويزات.</p>
+        </div>
+
+        <div id="selectedCoursesList"></div>
+
+        <button type="button" class="btn-primary" data-action="go" data-view="dashboard">ابدأ رحلتك التعليمية الآن ←</button>
+        <button type="button" class="btn-secondary" data-action="go" data-view="interests">تعديل المجالات المختارة</button>
+      </section>
+
+      <!-- 5. Dashboard Screen (Protected) -->
+      <section id="view-dashboard" class="view-screen">
+        <div class="section-head">
+          <span class="cloud-pill synced" id="cloudSyncBadge">☁️ متصل بسيرفر Firebase</span>
+          <h2 class="section-title" id="dashWelcomeTitle">لوحتي التعليمية</h2>
+          <p class="section-desc" id="dashSubtitle">تابع دروسك العربي، حل الكويزات، وأنجز مهامك العملية.</p>
+        </div>
+
+        <div class="dash-tabs">
+          <button type="button" class="dash-tab active" data-dash-tab="courses" data-action="dash-tab" data-tab="courses">دوراتي</button>
+          <button type="button" class="dash-tab" data-dash-tab="missions" data-action="dash-tab" data-tab="missions">المهام العملية</button>
+          <button type="button" class="dash-tab" data-dash-tab="progress" data-action="dash-tab" data-tab="progress">التقدم والنقاط</button>
+        </div>
+
+        <div id="dashTabCourses"></div>
+
+        <div id="dashTabMissions" style="display:none;">
+          <div class="filter-row">
+            <button type="button" class="filter-btn active" data-mission-filter="all" data-action="mission-filter" data-filter="all">الكل</button>
+            <button type="button" class="filter-btn" data-mission-filter="active" data-action="mission-filter" data-filter="active">قيد التنفيذ</button>
+            <button type="button" class="filter-btn" data-mission-filter="done" data-action="mission-filter" data-filter="done">مكتملة</button>
+          </div>
+          <div id="missionsList"></div>
+        </div>
+
+        <div id="dashTabProgress" style="display:none;">
+          <div class="card">
+            <h3 class="course-title">ملخص إنجازاتك</h3>
+            <div class="stats-grid">
+              <div class="stat-box">
+                <span class="stat-num" id="progXpVal">0</span>
+                <span class="stat-lbl">نقاط XP</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-num" id="progLessonsVal">0</span>
+                <span class="stat-lbl">دروس مكتملة</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-num" id="progMissionsVal">0</span>
+                <span class="stat-lbl">مهام منجزة</span>
+              </div>
+            </div>
+            <div id="progressCoursesBreakdown"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. All Courses Catalog Screen (Protected) -->
+      <section id="view-courses" class="view-screen">
+        <div class="section-head">
+          <h2 class="section-title">جميع الدورات</h2>
+          <p class="section-desc">تصفح كل الدورات المتاحة في مختلف المجالات وابدأ التعلم فورًا.</p>
+        </div>
+        <div id="allCoursesList"></div>
+      </section>
+
+      <!-- 7. Course & Video Lesson + Quiz Player Screen (Protected) -->
+      <section id="view-player" class="view-screen">
+        <div class="player-header-bar">
+          <button type="button" class="btn-ghost" data-action="go" data-view="dashboard">← عودة للوحتي</button>
+          <span class="badge-domain" id="playerCourseDomain">المجال</span>
+        </div>
+
+        <div class="card">
+          <h2 class="course-title" id="playerCourseTitle">عنوان الدورة</h2>
+          <p class="course-desc" id="playerCourseDesc">وصف الدورة</p>
+          <div class="progress-track">
+            <div class="progress-fill" id="playerCourseBar" style="width:0%;"></div>
+          </div>
+
+          <div class="lesson-pills" id="playerLessonPills"></div>
+
+          <h3 class="course-title" id="playerLessonTitle" style="margin-bottom:8px;">عنوان الدرس</h3>
+
+          <div id="videoStage" class="video-stage">
+            <div class="video-frame-wrap">
+              <iframe
+                id="youtubePlayerFrame"
+                src=""
+                title="مشغل الفيديو التعليمي"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="video-controls-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn-ghost" data-action="fullscreen-video">⛶ تكبير ملء الشاشة</button>
+              <button type="button" class="btn-ghost" data-action="theater-video">🎬 توسيع العرض</button>
+              <a id="externalYtLink" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="btn-ghost" style="text-decoration:none;display:inline-flex;align-items:center;">فتح على YouTube ↗</a>
+            </div>
+            <button type="button" class="btn-ghost" id="toggleLessonDoneBtn" data-action="toggle-current-lesson">✓ تحديد كمكتمل</button>
+          </div>
+
+          <p class="course-desc" id="playerLessonSummary">ملخص الدرس العربي.</p>
+
+          <!-- Quiz Section (4 Questions per Video Lesson) -->
+          <div class="quiz-box">
+            <h4 class="course-title" style="font-size:1rem;margin-bottom:4px;">📝 كويز الدرس (4 أسئلة)</h4>
+            <p class="course-desc" style="margin-bottom:12px;">اختر إجابة لكل سؤال ثم اضغط «تحقق من الإجابات» للحصول على نقاط XP إضافية.</p>
+            <div id="quizQuestionsContainer"></div>
+            <button type="button" class="btn-primary" data-action="submit-quiz">تحقق من الإجابات</button>
+            <div id="quizResultBox" class="auth-feedback"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Bilingual Smart AI Assistant Screen (Protected) -->
+      <section id="view-ai" class="view-screen">
+        <div class="section-head">
+          <h2 class="section-title">المساعد الذكي (عربي / English)</h2>
+          <p class="section-desc">اسأل بالعربية أو الإنجليزية عن خطة مذاكرة، اختيار مجال، تسويق وبيع، عمل حر، طب وصحة، أو برمجة وذكاء اصطناعي.</p>
+        </div>
+
+        <div class="card">
+          <div class="quick-prompts">
+            <button type="button" class="quick-chip" data-action="quick-ai" data-prompt="اعمل لي خطة مذاكرة أسبوعية عملية">خطة مذاكرة أسبوعية</button>
+            <button type="button" class="quick-chip" data-action="quick-ai" data-prompt="إزاي أبدأ في التسويق والبيع والعمل الحر؟">التسويق والعمل الحر</button>
+            <button type="button" class="quick-chip" data-action="quick-ai" data-prompt="How should I start learning AI and programming?">AI & Coding Roadmap</button>
+            <button type="button" class="quick-chip" data-action="quick-ai" data-prompt="نصائح للبداية في العلوم الصحية والطب">العلوم الصحية والطب</button>
+          </div>
+
+          <div id="chatBox" class="chat-box"></div>
+
+          <form id="aiChatForm" class="chat-form">
+            <input id="aiChatInput" type="text" placeholder="اكتب سؤالك بالعربية أو الإنجليزية... / Ask in Arabic or English..." required />
+            <button type="submit" class="btn-primary" style="width:auto;padding:11px 18px;">إرسال</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- 9. Account Screen (Protected) -->
+      <section id="view-account" class="view-screen">
+        <div class="card">
+          <span class="step-label">حسابي في مسارك الذكي</span>
+          <h2 class="course-title" id="accNameText" style="font-size:1.3rem;margin-top:8px;">حساب الطالب</h2>
+          <p class="course-desc" id="accEmailText">student@example.com</p>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span class="stat-num" id="accXpVal">0</span>
+              <span class="stat-lbl">نقاط XP</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-num" id="accDomainsVal">0</span>
+              <span class="stat-lbl">مجالات مختارة</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-num" id="accCoursesVal">0</span>
+              <span class="stat-lbl">دورات متاحة</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary" data-action="go" data-view="interests">تعديل المجالات المختارة</button>
+          <button type="button" class="btn-secondary" data-action="logout">تسجيل الخروج</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="التنقل السفلي">
+      <div class="bottom-nav-inner">
+        <button type="button" class="nav-btn active" data-nav="dashboard" data-action="go" data-view="dashboard">
+          <span>🏠</span>
+          <span>لوحتي</span>
+        </button>
+        <button type="button" class="nav-btn" data-nav="courses" data-action="go" data-view="courses">
+          <span>📚</span>
+          <span>الدورات</span>
+        </button>
+        <button type="button" class="nav-btn" data-nav="ai" data-action="go" data-view="ai">
+          <span>✨</span>
+          <span>المساعد الذكي</span>
+        </button>
+        <button type="button" class="nav-btn" data-nav="account" data-action="go" data-view="account">
+          <span>👤</span>
+          <span>حسابي</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Firebase Email Server (Auth + Firestore Users & Emails Registry) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      updateProfile,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3jiWO41NbnUUDUwZu6Z0JZbWwFrmdX2I",
+      authDomain: "your-smart-path-21f11.firebaseapp.com",
+      projectId: "your-smart-path-21f11",
+      storageBucket: "your-smart-path-21f11.firebasestorage.app",
+      messagingSenderId: "960979370879",
+      appId: "1:960979370879:web:36c79491fa9a30f514104a",
+      measurementId: "G-4S84R0SLH7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch (_) {}
+
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    function withTimeout(promise, ms = 2500) {
+      return Promise.race([
+        promise,
+        new Promise((resolve) => setTimeout(() => resolve(null), ms))
+      ]);
+    }
+
+    function formatFirebaseAuthError(code, mode) {
+      if (
+        code === "auth/user-not-found" ||
+        code === "auth/invalid-credential" ||
+        code === "auth/invalid-login-credentials"
+      ) {
+        return mode === "login"
+          ? "هذا البريد الإلكتروني غير مسجل على سيرفر Firebase أو البيانات غير صحيحة. اختر «إنشاء حساب جديد» لتسجيله."
+          : "تعذر إنشاء الحساب؛ تحقق من البريد الإلكتروني وكلمة المرور.";
+      }
+      if (code === "auth/wrong-password") {
+        return "كلمة المرور غير صحيحة لهذا البريد الإلكتروني.";
+      }
+      if (code === "auth/email-already-in-use") {
+        return "هذا البريد الإلكتروني مسجل بالفعل على سيرفر Firebase. اختر «تسجيل الدخول».";
+      }
+      if (code === "auth/weak-password") {
+        return "كلمة المرور ضعيفة؛ يجب أن تكون 6 أحرف أو أرقام على الأقل.";
+      }
+      if (code === "auth/invalid-email") {
+        return "صيغة البريد الإلكتروني غير صحيحة.";
+      }
+      if (code === "auth/operation-not-allowed") {
+        return "فعّل Email/Password من Firebase Console > Authentication > Sign-in method.";
+      }
+      return "تعذر إتمام العملية عبر سيرفر Firebase الآن (" + (code || "خطأ اتصال") + ").";
+    }
+
+    function registerEmailOnServerBackground(uid, email, name) {
+      const cleanEmail = email.trim().toLowerCase();
+      const safeEmailKey = encodeURIComponent(cleanEmail);
+
+      setDoc(doc(db, "emails", safeEmailKey), {
+        uid,
+        email: cleanEmail,
+        name,
+        provider: "password",
+        registeredAt: Date.now()
+      }, { merge: true }).catch(() => {});
+
+      setDoc(doc(db, "users", uid), {
+        uid,
+        email: cleanEmail,
+        name,
+        updatedAt: Date.now()
+      }, { merge: true }).catch(() => {});
+    }
+
+    window.SmartPathFirebaseServer = {
+      appId: firebaseConfig.appId,
+      projectId: firebaseConfig.projectId,
+
+      async loginWithEmail(email, password) {
+        try {
+          const cred = await signInWithEmailAndPassword(auth, email, password);
+          let docData = null;
+          try {
+            const snap = await withTimeout(getDoc(doc(db, "users", cred.user.uid)), 2200);
+            if (snap && snap.exists()) docData = snap.data();
+          } catch (_) {}
+
+          const resolvedName = (docData && docData.name) || cred.user.displayName || email.split("@")[0];
+          registerEmailOnServerBackground(cred.user.uid, cred.user.email, resolvedName);
+
+          return {
+            ok: true,
+            uid: cred.user.uid,
+            name: resolvedName,
+            email: cred.user.email,
+            remoteState: docData && docData.state ? docData.state : null
+          };
+        } catch (err) {
+          return {
+            ok: false,
+            message: formatFirebaseAuthError(err && err.code, "login")
+          };
+        }
+      },
+
+      async registerWithEmail(name, email, password) {
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          const cleanName = (name || email.split("@")[0]).trim();
+          try { await withTimeout(updateProfile(cred.user, { displayName: cleanName }), 1500); } catch (_) {}
+
+          registerEmailOnServerBackground(cred.user.uid, cred.user.email, cleanName);
+
+          return {
+            ok: true,
+            uid: cred.user.uid,
+            name: cleanName,
+            email: cred.user.email
+          };
+        } catch (err) {
+          return {
+            ok: false,
+            message: formatFirebaseAuthError(err && err.code, "register")
+          };
+        }
+      },
+
+      async syncUserState(stateSnapshot) {
+        const u = auth.currentUser;
+        if (!u) return;
+        try {
+          await withTimeout(setDoc(doc(db, "users", u.uid), {
+            uid: u.uid,
+            name: stateSnapshot.user.name,
+            email: stateSnapshot.user.email,
+            state: {
+              selectedDomains: stateSnapshot.selectedDomains,
+              xp: stateSnapshot.xp,
+              completedLessons: stateSnapshot.completedLessons,
+              missions: stateSnapshot.missions
+            },
+            updatedAt: Date.now()
+          }, { merge: true }), 2500);
+        } catch (_) {}
+      },
+
+      async logoutServer() {
+        try { await signOut(auth); } catch (_) {}
+      }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!window.SmartPathApp) return;
+      if (user && user.email) {
+        let docData = null;
+        try {
+          const snap = await withTimeout(getDoc(doc(db, "users", user.uid)), 2200);
+          if (snap && snap.exists()) docData = snap.data();
+        } catch (_) {}
+        window.SmartPathApp.onServerSession(user, docData);
+      } else {
+        window.SmartPathApp.onServerSignedOut();
+      }
+    });
+  </script>
+
+  <!-- Main Application Logic -->
+  <script>
+    (function () {
+      const STORAGE_KEY = "smart_path_v13_state";
+      const PUBLIC_VIEWS = ["welcome", "auth"];
+
+      const DOMAINS = [
+        { id: "ai-coding", ar: "الذكاء الاصطناعي والبرمجة", en: "AI & Coding", icon: "🤖" },
+        { id: "tech-sql", ar: "التكنولوجيا وقواعد البيانات", en: "Tech & SQL", icon: "💻" },
+        { id: "freelance", ar: "العمل الحر والربح من الإنترنت", en: "Freelancing", icon: "🛠️" },
+        { id: "marketing-sales", ar: "التسويق والبيع والتجارة الإلكترونية", en: "Marketing, Sales & E-Commerce", icon: "📈" },
+        { id: "health-med", ar: "الطب والعلوم الصحية", en: "Medicine & Health", icon: "🩺" },
+        { id: "career-lang", ar: "الاستعداد الوظيفي واللغات", en: "Career & Languages", icon: "🌐" },
+        { id: "business", ar: "الأعمال والريادة", en: "Business & Entrepreneurship", icon: "💼" },
+        { id: "design-ux", ar: "التصميم وتجربة المستخدم", en: "UI/UX & Design", icon: "🎨" },
+        { id: "arch-env", ar: "العمارة والاستدامة", en: "Architecture & Sustainability", icon: "🏛️" }
+      ];
+
+      function makeQuiz(q1, q2, q3, q4) {
+        return [q1, q2, q3, q4];
+      }
+
+      const COURSES = [
+        {
+          id: "c-ai-1",
+          domainId: "ai-coding",
+          domainLabel: "الذكاء الاصطناعي والبرمجة • AI & Coding",
+          title: "مسار البرمجة والذكاء الاصطناعي من الصفر",
+          desc: "خطة عملية لفهم البرمجة والذكاء الاصطناعي باللغة العربية وتطبيقات عملية يومية.",
+          lessons: [
+            {
+              id: "l-ai-1",
+              title: "ما هي البرمجة وكيف تبدأ تعلمها من الصفر؟",
+              ytId: "9ndH9Qo05F4",
+              summary: "شرح مبسط لفكرة البرمجة، كيف يفكر المبرمج، وأفضل طريقة للانطلاق خطوة بخطوة بدون تشتت.",
+              quiz: makeQuiz(
+                { q: "ما هو الهدف الأساسي من كتابة الكود البرمجي؟", opts: ["إعطاء تعليمات واضحة للحاسوب لحل مشكلة", "تغيير لون الشاشة فقط", "حذف ملفات النظام"], ans: 0 },
+                { q: "ما أفضل طريقة للمبتدئ لتثبيت مفاهيم البرمجة؟", opts: ["المشاهدة فقط بدون تطبيق", "التطبيق العملي وحل تمارين صغيرة باستمرار", "حفظ الكود غيبًا"], ans: 1 },
+                { q: "ماذا تعني الخوارزمية (Algorithm) في البرمجة؟", opts: ["خطوات متسلسلة ومنطقية لحل مهمة", "نوع من أنواع الفيروسات", "كابل إنترنت سريع"], ans: 0 },
+                { q: "كيف تتغلب على الأخطاء البرمجية (Bugs) أثناء التعلم؟", opts: ["ترك المجال تمامًا", "قراءة رسالة الخطأ وتقسيم المشكلة وتجربة الحل", "إعادة كتابة المشروع من الصفر كل مرة"], ans: 1 }
+              )
+            },
+            {
+              id: "l-ai-2",
+              title: "من الصفر لاحتراف الذكاء الاصطناعي بخطة يومية",
+              ytId: "uE8uomCumSo",
+              summary: "تعرف على أساسيات الذكاء الاصطناعي وأدواته وكيف تبني عادة يومية قصيرة وفعالة للتعلم.",
+              quiz: makeQuiz(
+                { q: "ما الذي يميز الاستمرارية اليومية القصيرة في تعلم الذكاء الاصطناعي؟", opts: ["بناء تراكم معرفي ثابت دون إرهاق", "عدم فهم الأساسيات", "الاعتماد على الحظ"], ans: 0 },
+                { q: "ما هي هندسة الأوامر (Prompt Engineering)؟", opts: ["صياغة تعليمات دقيقة وواضحة لنموذج الذكاء الاصطناعي", "تصميم لوحة أم", "تركيب كاميرا مراقبة"], ans: 0 },
+                { q: "لماذا يُعد وضوح السياق مهمًا عند سؤال الذكاء الاصطناعي؟", opts: ["لأنه يساعد النموذج على تقديم إجابة أدق وأكثر ارتباطًا بهدفك", "لزيادة طول السؤال فقط", "لا يوجد أي تأثير"], ans: 0 },
+                { q: "أين يُنصح بتطبيق أدوات الذكاء الاصطناعي؟", opts: ["في البحث المنظم، تلخيص الأفكار، وبناء نماذج أولية", "في تعطيل الحسابات", "في إهمال التفكير النقدي"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-sql-1",
+          domainId: "tech-sql",
+          domainLabel: "التكنولوجيا وقواعد البيانات • Tech & SQL",
+          title: "قواعد البيانات ولغة SQL للمبتدئين",
+          desc: "تعلم مفاهيم قواعد البيانات وكيف تتعامل مع SQL وتبني استعلامات عملية بوضوح.",
+          lessons: [
+            {
+              id: "l-sql-1",
+              title: "قواعد البيانات (Database) للمبتدئين بأبسط طريقة",
+              ytId: "EkGGsT2v1Z0",
+              summary: "فهم مفهوم قواعد البيانات، الجداول والعلاقات، وكيف تُخزَّن البيانات وتُسترجع بكفاءة.",
+              quiz: makeQuiz(
+                { q: "ما الوظيفة الأساسية لقاعدة البيانات؟", opts: ["تنظيم وتخزين واسترجاع البيانات بكفاءة", "تشغيل الألعاب ثلاثية الأبعاد فقط", "طباعة المستندات الورقية"], ans: 0 },
+                { q: "في قواعد البيانات العلائقية، كيف تُنظَّم البيانات غالبًا؟", opts: ["في جداول تحتوي على صفوف وأعمدة", "في ملف صوتي واحد", "في صورة ثابتة"], ans: 0 },
+                { q: "ما فائدة المفتاح الأساسي (Primary Key) في الجدول؟", opts: ["تمييز كل سجل بشكل فريد داخل الجدول", "حذف البيانات تلقائيًا", "إخفاء الأعمدة"], ans: 0 },
+                { q: "لماذا نفضل قواعد البيانات على ملفات النصوص العشوائية؟", opts: ["لسرعة البحث، الأمان، وتكامل البيانات", "لأنها لا تحتاج إلى تنظيم", "لأنها تمنع التعديل"], ans: 0 }
+              )
+            },
+            {
+              id: "l-sql-2",
+              title: "أساسيات SQL مع مشروع عملي",
+              ytId: "N-WPYk417yE",
+              summary: "تعرّف على أوامر الاستعلام والفرز والربط في SQL لتطبيقها في مشاريع واقعية.",
+              quiz: makeQuiz(
+                { q: "أي أمر في SQL يُستخدم لاسترجاع البيانات من جدول؟", opts: ["SELECT", "DROP", "SHUTDOWN"], ans: 0 },
+                { q: "ما وظيفة عبارة WHERE في استعلام SQL؟", opts: ["تصفية النتائج حسب شرط محدد", "تغيير اسم المتصفح", "حذف قاعدة البيانات بالكامل"], ans: 0 },
+                { q: "ماذا يفعل أمر INSERT INTO؟", opts: ["إضافة سجلات جديدة إلى جدول", "تغيير لون الخط", "إغلاق الاتصال"], ans: 0 },
+                { q: "ما فائدة التصفية والفرز في البيانات؟", opts: ["الوصول السريع للمعلومة المطلوبة واتخاذ قرار أدق", "زيادة التكرار غير المفيد", "إتلاف السجلات"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-free-1",
+          domainId: "freelance",
+          domainLabel: "العمل الحر والربح من الإنترنت • Freelancing",
+          title: "العمل الحر وبناء أول مشروع على الإنترنت",
+          desc: "نصائح عملية وعملية لبداية قوية في العمل الحر وتقديم خدمات احترافية للعملاء.",
+          lessons: [
+            {
+              id: "l-free-1",
+              title: "الـ 10 نصائح الذهبية للفريلانسرز الجدد",
+              ytId: "8ijsxKzgROM",
+              summary: "كيف تبدأ كفريلانسر، تبني معرض أعمال مقنع، وتتعامل مع العملاء بثقة واحتراف.",
+              quiz: makeQuiz(
+                { q: "ما أول خطوة مهمة قبل التقديم على مشاريع العمل الحر؟", opts: ["تحديد مهارة واضحة وبناء نماذج أعمال (Portfolio)", "الانتظار دون أي نموذج", "رفع الأسعار بلا مبرر"], ans: 0 },
+                { q: "كيف تكتب عرضًا احترافيًا يقنع العميل؟", opts: ["توضح فهمك لمتطلباته وتقترح خطة تنفيذ واضحة", "نسخ رسالة عشوائية عامة", "تجاهل تفاصيل المشروع"], ans: 0 },
+                { q: "ما أهمية الالتزام بالمواعيد والتواصل الواضح؟", opts: ["يبني الثقة ويزيد فرص التقييمات الإيجابية وتكرار العمل", "يقلل من قيمة الخدمة", "ليس له أثر"], ans: 0 },
+                { q: "كيف تتعامل مع عميل يطلب تعديلات إضافية كبيرة؟", opts: ["مراجعة نطاق العمل المتفق عليه وتوضيح التفاصيل بهدوء واحتراف", "الاختفاء وعدم الرد", "حذف الملفات"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-mkt-1",
+          domainId: "marketing-sales",
+          domainLabel: "التسويق والبيع والتجارة الإلكترونية • Marketing & Sales",
+          title: "أسرار التسويق الرقمي والبيع وبناء المتاجر",
+          desc: "كيف تفهم سلوك العميل، تسوّق لمنتجك أو خدمتك، وتزيد المبيعات بأساليب حديثة.",
+          lessons: [
+            {
+              id: "l-mkt-1",
+              title: "كورس أسرار التسويق الإلكتروني من الصفر للاحتراف",
+              ytId: "0fvYICr7m0M",
+              summary: "شرح شامل لأساسيات التسويق الرقمي، استهداف الجمهور، بناء العروض، وتحويل المهتمين إلى عملاء.",
+              quiz: makeQuiz(
+                { q: "ما جوهر التسويق الناجح لأي منتج أو خدمة؟", opts: ["فهم مشكلة العميل وتقديم قيمة حقيقية تحلها", "الإزعاج بكثرة الرسائل", "البيع بأي ثمن دون قيمة"], ans: 0 },
+                { q: "ماذا يعني تحديد الجمهور المستهدف (Target Audience)؟", opts: ["معرفة الفئة الأكثر احتياجًا واستعدادًا للاستفادة من عرضك", "توجيه الإعلان للجميع بنفس الطريقة", "تجاهل بيانات العملاء"], ans: 0 },
+                { q: "ما دور عرض القيمة (Value Offer) في البيع؟", opts: ["توضيح لماذا يختار العميل عرضك تحديدًا", "تعقيد شروط الشراء", "إخفاء الفوائد"], ans: 0 },
+                { q: "كيف ترفع معدل التحويل (Conversion) في البيع؟", opts: ["بتبسيط الخطوات، بناء الثقة، وتقديم دعوة واضحة لاتخاذ إجراء", "بإخفاء معلومات التواصل", "بتأجيل الرد لأسابيع"], ans: 0 }
+              )
+            },
+            {
+              id: "l-mkt-2",
+              title: "التسويق من الألف إلى الياء بأسلوب عملي",
+              ytId: "uM_iBqkFXvE",
+              summary: "ربط الرسالة التسويقية بالهوية والمحتوى والمتابعة لزيادة المبيعات وبناء ولاء العملاء.",
+              quiz: makeQuiz(
+                { q: "لماذا يُعد الاحتفاظ بالعميل الحالي مهمًا في التجارة والبيع؟", opts: ["لأنه أقل تكلفة ويدعم النمو المستدام والترشيحات", "لأنه لا يشتري مجددًا", "لأنه يقلل الأرباح"], ans: 0 },
+                { q: "ما عنصر المحتوى الأكثر تأثيرًا في جذب الجمهور؟", opts: ["المحتوى المفيد والواضح الذي يجيب عن أسئلة الجمهور", "الكلام الغامض غير المفهوم", "التكرار الممل"], ans: 0 },
+                { q: "ما أهمية قياس النتائج في الحملات التسويقية؟", opts: ["لمعرفة ما ينجح وتطوير الأداء بناءً على أرقام حقيقية", "لتجاهل التحسين", "لإيقاف المتابعة"], ans: 0 },
+                { q: "ما الفرق بين الميزة والمنفعة (Benefit) في البيع؟", opts: ["المنفعة توضح الأثر المباشر الذي يحصل عليه العميل", "لا يوجد أي فرق", "الميزة تعني السعر فقط"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-med-1",
+          domainId: "health-med",
+          domainLabel: "الطب والعلوم الصحية • Medicine & Health",
+          title: "مدخل العلوم الصحية والتشريح والفسيولوجي",
+          desc: "مقدمة عربية مبسطة لفهم جسم الإنسان، التشريح الأساسي، والوظائف الحيوية.",
+          lessons: [
+            {
+              id: "l-med-1",
+              title: "أساسيات التشريح: الوضع التشريحي والمستويات",
+              ytId: "Dqti_6eOa5o",
+              summary: "مدخل واضح لأساسيات علم التشريح والمصطلحات المرجعية المستخدمة في العلوم الصحية.",
+              quiz: makeQuiz(
+                { q: "ما أهمية توحيد الوضع التشريحي في دراسة الطب والتشريح؟", opts: ["تحديد المواضع والاتجاهات بدقة موحدة دون لبس", "تغيير أسماء الأعضاء يوميًا", "الاستغناء عن التشريح"], ans: 0 },
+                { q: "ماذا يدرس علم التشريح (Anatomy) بشكل أساسي؟", opts: ["تركيب أعضاء الجسم وبنيتها ومواقعها", "أسعار الأدوية فقط", "تصميم المباني"], ans: 0 },
+                { q: "كيف يرتبط علم التشريح بعلم وظائف الأعضاء (Physiology)؟", opts: ["البنية التركيبية ترتبط بكيفية أداء العضو لوظيفته", "لا توجد علاقة بينهما", "أحدهما يلغي الآخر"], ans: 0 },
+                { q: "ما أفضل أسلوب لمذاكرة المصطلحات الطبية والصحية؟", opts: ["ربط المصطلح بمعناه الجذري وبالرسم التوضيحي", "الحفظ العشوائي دون فهم", "تجاهل المراجعة"], ans: 0 }
+              )
+            },
+            {
+              id: "l-med-2",
+              title: "مقدمة الفسيولوجي والاتزان الداخلي (Homeostasis)",
+              ytId: "Q0wQAxzRXOk",
+              summary: "كيف يحافظ الجسم على توازنه الداخلي ووظائفه الحيوية في مختلف الظروف.",
+              quiz: makeQuiz(
+                { q: "ماذا يعني مفهوم الاتزان الداخلي (Homeostasis)؟", opts: ["قدرة الجسم على الحفاظ على بيئة داخلية مستقرة ومتوازنة", "توقف عمل الأجهزة الحيوية", "فقدان الطاقة"], ans: 0 },
+                { q: "ما دور أجهزة الجسم المختلفة في الحفاظ على الاتزان؟", opts: ["تعمل معًا بتكامل واستجابة مستمرة للتغيرات", "تعمل بمعزل تام دون تنسيق", "تعطل بعضها عمدًا"], ans: 0 },
+                { q: "لماذا يُعد فهم الفسيولوجي أساسًا في العلوم الصحية؟", opts: ["لأنه يوضح كيف تعمل الأعضاء السليمة وكيف تنشأ الاختلالات", "لأنه مادة نظرية بلا تطبيق", "لأنه يخص الحسابات فقط"], ans: 0 },
+                { q: "ما أفضل طريقة لتثبيت مفاهيم الفسيولوجي؟", opts: ["رسم مسارات التغذية الراجعة وشرحها بأسلوبك", "تأجيل المذاكرة ليوم الامتحان", "حفظ العناوين فقط"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-car-1",
+          domainId: "career-lang",
+          domainLabel: "الاستعداد الوظيفي واللغات • Career & Languages",
+          title: "الإنجليزية للعمل واجتياز المقابلات بنجاح",
+          desc: "جمل عملية للعمل، التواصل المهني، وكيف تجيب عن أبرز أسئلة المقابلات الشخصية.",
+          lessons: [
+            {
+              id: "l-car-1",
+              title: "كيف تتكلم إنجليزي في العمل؟ أهم الجمل العملية",
+              ytId: "5cHmQ_a3GgU",
+              summary: "عبارات عملية جاهزة للاستخدام في بيئة العمل والاجتماعات والتواصل اليومي.",
+              quiz: makeQuiz(
+                { q: "ما أفضل طريقة لإتقان الإنجليزية في بيئة العمل؟", opts: ["التدرب على جمل وسيناريوهات عملية متكررة في العمل", "حفظ قواميس كاملة دون نطق", "الخوف من الخطأ وعدم التحدث"], ans: 0 },
+                { q: "لماذا يُعد الوضوح والبساطة مهمين عند التحدث بالإنجليزية في العمل؟", opts: ["لضمان وصول الفكرة بدقة وسرعة دون سوء فهم", "لأن التعقيد مطلوب دائمًا", "لتطويل الحديث"], ans: 0 },
+                { q: "كيف تطور مهارة الاستماع والنطق معًا؟", opts: ["الاستماع لمقاطع واضحة وتكرار الجمل بصوت مسموع", "القراءة الصامتة فقط", "تجنب الاستماع"], ans: 0 },
+                { q: "ما الخطوة اليومية البسيطة لتطوير لغتك؟", opts: ["تعلم وممارسة عدة عبارات عملية يوميًا وربطها بمجالك", "الاعتماد على الترجمة الآلية دائمًا", "الدراسة مرة كل شهر"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-bus-1",
+          domainId: "business",
+          domainLabel: "الأعمال والريادة • Business & Entrepreneurship",
+          title: "ريادة الأعمال وإدارة المشروعات بوضوح",
+          desc: "الفرق بين إدارة الأعمال وريادة الأعمال وإدارة المشروعات وكيف تبدأ فكرتك بواقعية.",
+          lessons: [
+            {
+              id: "l-bus-1",
+              title: "الفرق بين إدارة الأعمال وريادة الأعمال وإدارة المشروعات",
+              ytId: "ZkPBvLF3N2c",
+              summary: "توضيح عملي للفروق الجوهرية بين إدارة الأعمال، ريادة الأعمال، وإدارة المشروعات.",
+              quiz: makeQuiz(
+                { q: "ما الذي يميز ريادة الأعمال (Entrepreneurship)؟", opts: ["ابتكار فكرة أو نموذج عمل واقتناص الفرص وبناء مشروع", "العمل دون أي تخطيط", "تجنب السوق"], ans: 0 },
+                { q: "ما محور إدارة المشروعات (Project Management)؟", opts: ["تحقيق هدف محدد ضمن نطاق وزمن وموارد واضحة", "ترك العمل دون جدول زمني", "تجاهل التسليمات"], ans: 0 },
+                { q: "ما أهمية التحقق من الفكرة قبل التوسع الكبير؟", opts: ["لتقليل المخاطر والتأكد من وجود طلب حقيقي على الحل", "لزيادة التكاليف بلا داعٍ", "لتأجيل التجربة"], ans: 0 },
+                { q: "كيف تقيس نجاح مشروعك في البداية؟", opts: ["بمدى رضا العملاء، جودة التنفيذ، واستدامة القيمة", "بالكلام النظري فقط", "بعدم متابعة الأداء"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-ux-1",
+          domainId: "design-ux",
+          domainLabel: "التصميم وتجربة المستخدم • UI/UX & Design",
+          title: "أساسيات UI/UX وتصميم الواجهات في Figma",
+          desc: "من أين تبدأ في تصميم تجربة المستخدم والواجهات وكيف تستخدم Figma بأسلوب عملي.",
+          lessons: [
+            {
+              id: "l-ux-1",
+              title: "خريطة الطريق الكاملة للبدء في UI/UX و Product Design",
+              ytId: "f7kcWoUUZqk",
+              summary: "خطوات واضحة لتعلم تصميم تجربة المستخدم والواجهات وبناء ملف أعمال قوي.",
+              quiz: makeQuiz(
+                { q: "ما الفرق الأساسي بين UI و UX؟", opts: ["UX يركز على تجربة وسهولة استخدام المنتج، وUI يركز على الشكل والواجهات", "هما المصطلح نفسه تمامًا", "UI يخص قواعد البيانات"], ans: 0 },
+                { q: "ما أهمية التباين والوضوح البصري في تصميم الواجهات؟", opts: ["تسهيل القراءة وتوجيه انتباه المستخدم للعناصر المهمة", "زيادة ازدحام الصفحة", "إخفاء الأزرار"], ans: 0 },
+                { q: "لماذا تُعد النماذج الأولية (Wireframes & Prototypes) مفيدة؟", opts: ["لاختبار الفكرة وتعديلها سريعًا قبل التنفيذ الكامل", "لإضاعة الوقت", "لمنع الملاحظات"], ans: 0 },
+                { q: "كيف تحسّن ذائقتك التصميمية باستمرار؟", opts: ["بتحليل واجهات ناجحة والتطبيق العملي المستمر", "بالنقل الأعمى دون فهم السبب", "بتجاهل ملاحظات المستخدمين"], ans: 0 }
+              )
+            }
+          ]
+        },
+        {
+          id: "c-arch-1",
+          domainId: "arch-env",
+          domainLabel: "العمارة والاستدامة • Architecture & Sustainability",
+          title: "العمارة المستدامة والتصميم البيئي الحديث",
+          desc: "مبادئ العمارة الخضراء والاستدامة وكيف توازن المباني بين الوظيفة والبيئة.",
+          lessons: [
+            {
+              id: "l-arch-1",
+              title: "الاستدامة في البناء: تكامل العمارة الخضراء والهندسة",
+              ytId: "BF291MpM-TE",
+              summary: "نظرة عملية على مبادئ الاستدامة في البناء وكفاءة الطاقة والموارد في التصميم المعماري.",
+              quiz: makeQuiz(
+                { q: "ما الهدف الرئيسي من العمارة المستدامة؟", opts: ["تقليل الأثر البيئي ورفع كفاءة الطاقة والموارد مع راحة المستخدم", "استهلاك أكبر قدر من الطاقة", "تجاهل المناخ المحلي"], ans: 0 },
+                { q: "كيف يؤثر توجيه المبنى والإضاءة الطبيعية على التصميم؟", opts: ["يقلل الحاجة للإضاءة والتبريد الصناعي ويحسّن جودة المكان", "يزيد من استهلاك الكهرباء", "لا يؤثر على المبنى"], ans: 0 },
+                { q: "ما معنى اختيار مواد مستدامة ومناسبة للبيئة؟", opts: ["مراعاة دورة حياة المادة وتوفرها وأثرها البيئي والاقتصادي", "استخدام مواد عشوائية دون دراسة", "إهمال الصيانة"], ans: 0 },
+                { q: "كيف يرتبط التصميم المعماري بسلوك الإنسان؟", opts: ["المساحات المدروسة تعزز الراحة والإنتاجية والتفاعل الإيجابي", "التصميم لا يؤثر على الإنسان", "يعتمد على الديكور فقط"], ans: 0 }
+              )
+            }
+          ]
+        }
+      ];
+
+      const INITIAL_MISSIONS = [
+        { id: "m1", title: "اختر مجالاتك التعليمية وابدأ أول دورة", category: "البداية", xp: 20, done: false },
+        { id: "m2", title: "شاهد درس فيديو عربي كامل وأجب عن كويز الأسئلة الأربعة", category: "الفيديوهات والكويزات", xp: 30, done: false },
+        { id: "m3", title: "لخّص فكرة رئيسية من درس في مجال الذكاء الاصطناعي أو البرمجة", category: "الذكاء الاصطناعي", xp: 25, done: false },
+        { id: "m4", title: "صمم مخططًا بسيطًا لقاعدة بيانات أو استعلام SQL", category: "قواعد البيانات", xp: 25, done: false },
+        { id: "m5", title: "اكتب عرض خدمة واضح أو وصف منتج لعميل محتمل", category: "التسويق والعمل الحر", xp: 30, done: false },
+        { id: "m6", title: "حدّد فئة عملاء مستهدفة و3 نقاط قوة لعرضك البيعي", category: "التسويق والبيع", xp: 25, done: false },
+        { id: "m7", title: "راجع ملخصًا في التشريح أو الفسيولوجي واكتب 3 نقاط أساسية", category: "العلوم الصحية", xp: 25, done: false },
+        { id: "m8", title: "تدرّب على 5 عبارات عملية بالإنجليزية تخص مجال عملك أو دراستك", category: "اللغات والمهنة", xp: 20, done: false },
+        { id: "m9", title: "اكتب ملخصًا من 4 أسطر لفكرة مشروع أو خطة عمل", category: "الأعمال والريادة", xp: 25, done: false },
+        { id: "m10", title: "اسأل المساعد الذكي عن خطة مذاكرة أسبوعية تناسب وقتك", category: "التخطيط الذكي", xp: 20, done: false }
+      ];
+
+      function defaultState() {
+        return {
+          view: "auth",
+          dashTab: "courses",
+          missionFilter: "all",
+          authMode: "login",
+          theaterMode: false,
+          user: {
+            name: "",
+            email: "",
+            loggedIn: false
+          },
+          selectedDomains: ["ai-coding", "tech-sql", "marketing-sales", "freelance"],
+          xp: 0,
+          completedLessons: [],
+          activeCourseId: COURSES[0].id,
+          activeLessonId: COURSES[0].lessons[0].id,
+          missions: INITIAL_MISSIONS.map((m) => ({ ...m })),
+          chat: [
+            {
+              role: "ai",
+              text: "أهلًا بك في مسارك الذكي! اسألني بالعربية أو الإنجليزية عن خطط المذاكرة، اختيار التخصص، التسويق والبيع، العمل الحر، الطب والعلوم الصحية، أو البرمجة والذكاء الاصطناعي."
+            }
+          ]
+        };
+      }
+
+      function loadState() {
+        const base = defaultState();
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return base;
+          const parsed = JSON.parse(raw);
+          const mergedUser = { ...base.user, ...(parsed.user || {}) };
+          if (!mergedUser.email) mergedUser.loggedIn = false;
+
+          return {
+            ...base,
+            ...parsed,
+            user: mergedUser,
+            selectedDomains: Array.isArray(parsed.selectedDomains) && parsed.selectedDomains.length
+              ? parsed.selectedDomains
+              : base.selectedDomains,
+            completedLessons: Array.isArray(parsed.completedLessons) ? parsed.completedLessons : [],
+            missions: Array.isArray(parsed.missions) && parsed.missions.length
+              ? parsed.missions
+              : base.missions,
+            chat: Array.isArray(parsed.chat) && parsed.chat.length ? parsed.chat : base.chat
+          };
+        } catch (_) {
+          return base;
+        }
+      }
+
+      let state = loadState();
+      let quizSelections = {};
+      let toastTimer = null;
+
+      function isAuthenticated() {
+        return Boolean(state.user && state.user.loggedIn && state.user.email);
+      }
+
+      function showToast(msg) {
+        const el = document.getElementById("toastBanner");
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+      }
+
+      function showAuthError(msg) {
+        const fb = document.getElementById("authFeedback");
+        if (!fb) return;
+        fb.className = "auth-feedback show err";
+        fb.textContent = msg;
+      }
+
+      function showAuthOk(msg) {
+        const fb = document.getElementById("authFeedback");
+        if (!fb) return;
+        fb.className = "auth-feedback show ok";
+        fb.textContent = msg;
+      }
+
+      function clearAuthFeedback() {
+        const fb = document.getElementById("authFeedback");
+        if (!fb) return;
+        fb.className = "auth-feedback";
+        fb.textContent = "";
+      }
+
+      function saveState(syncCloud = true) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (_) {}
+        if (syncCloud && isAuthenticated() && window.SmartPathFirebaseServer && typeof window.SmartPathFirebaseServer.syncUserState === "function") {
+          window.SmartPathFirebaseServer.syncUserState(state).catch(() => {});
+        }
+      }
+
+      function getCourseById(cid) {
+        return COURSES.find((c) => c.id === cid) || COURSES[0];
+      }
+
+      function getLessonByIds(cid, lid) {
+        const course = getCourseById(cid);
+        return course.lessons.find((l) => l.id === lid) || course.lessons[0];
+      }
+
+      function getCourseProgress(course) {
+        if (!course || !course.lessons.length) return 0;
+        const doneCount = course.lessons.filter((l) => state.completedLessons.includes(l.id)).length;
+        return Math.round((doneCount / course.lessons.length) * 100);
+      }
+
+      function getRecommendedCourses() {
+        const matched = COURSES.filter((c) => state.selectedDomains.includes(c.domainId));
+        return matched.length ? matched : COURSES;
+      }
+
+      function setView(viewName, extra = {}) {
+        const validViews = ["welcome", "interests", "auth", "selected", "dashboard", "courses", "player", "ai", "account"];
+        let target = validViews.includes(viewName) ? viewName : "auth";
+
+        if (!PUBLIC_VIEWS.includes(target) && !isAuthenticated()) {
+          target = "auth";
+          showToast("يجب تسجيل الدخول أو إنشاء حساب أولًا");
+        }
+
+        if (extra.courseId && isAuthenticated()) {
+          state.activeCourseId = extra.courseId;
+          const c = getCourseById(extra.courseId);
+          state.activeLessonId = extra.lessonId || c.lessons[0].id;
+        } else if (extra.lessonId && isAuthenticated()) {
+          state.activeLessonId = extra.lessonId;
+        }
+
+        state.view = target;
+        saveState(false);
+
+        document.querySelectorAll(".view-screen").forEach((sec) => {
+          sec.classList.toggle("active", sec.id === "view-" + target);
+        });
+
+        document.querySelectorAll(".nav-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.getAttribute("data-nav") === target);
+        });
+
+        renderAll();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function renderTopAndAccount() {
+        const xpBadge = document.getElementById("topXpBadge");
+        if (xpBadge) xpBadge.textContent = "⚡ " + state.xp + " XP";
+
+        const accName = document.getElementById("accNameText");
+        const accEmail = document.getElementById("accEmailText");
+        const accXp = document.getElementById("accXpVal");
+        const accDom = document.getElementById("accDomainsVal");
+        const accCrs = document.getElementById("accCoursesVal");
+
+        if (accName) accName.textContent = state.user.name || "حساب الطالب";
+        if (accEmail) accEmail.textContent = state.user.email || "";
+        if (accXp) accXp.textContent = String(state.xp);
+        if (accDom) accDom.textContent = String(state.selectedDomains.length);
+        if (accCrs) accCrs.textContent = String(COURSES.length);
+      }
+
+      function renderDomains() {
+        const box = document.getElementById("domainsContainer");
+        if (!box) return;
+
+        box.innerHTML = DOMAINS.map((d) => {
+          const isSel = state.selectedDomains.includes(d.id);
+          return (
+            '<button type="button" class="domain-card ' + (isSel ? "selected" : "") + '" data-action="toggle-domain" data-domain="' + d.id + '">' +
+              '<div class="domain-info">' +
+                '<span class="domain-ar">' + d.ar + (isSel ? '<span class="domain-status-tag">✓ مختار</span>' : "") + '</span>' +
+                '<span class="domain-en">' + d.en + '</span>' +
+              '</div>' +
+              '<div class="domain-icon-box">' + d.icon + '</div>' +
+            '</button>'
+          );
+        }).join("");
+      }
+
+      function renderCourseCardHTML(course, ctaLabel) {
+        const pct = getCourseProgress(course);
+        return (
+          '<div class="course-card">' +
+            '<div class="course-top-row">' +
+              '<span class="badge-domain">' + course.domainLabel + '</span>' +
+              '<span class="course-pct">' + pct + '%</span>' +
+            '</div>' +
+            '<h3 class="course-title">' + course.title + '</h3>' +
+            '<p class="course-desc">' + course.desc + '</p>' +
+            '<div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;"></div></div>' +
+            '<button type="button" class="btn-primary" data-action="open-course" data-course="' + course.id + '">' + ctaLabel + '</button>' +
+          '</div>'
+        );
+      }
+
+      function renderSelectedCourses() {
+        const box = document.getElementById("selectedCoursesList");
+        if (!box) return;
+        const list = getRecommendedCourses();
+        box.innerHTML = list.map((c) => renderCourseCardHTML(c, "مشاهدة دروس الفيديو والكويز")).join("");
+      }
+
+      function renderAllCourses() {
+        const box = document.getElementById("allCoursesList");
+        if (!box) return;
+        box.innerHTML = COURSES.map((c) => renderCourseCardHTML(c, "فتح الدورة والاختبار")).join("");
+      }
+
+      function renderDashboard() {
+        const titleEl = document.getElementById("dashWelcomeTitle");
+        if (titleEl) {
+          titleEl.textContent = state.user.name
+            ? "مرحبًا " + state.user.name + " • لوحتي التعليمية"
+            : "لوحتي التعليمية";
+        }
+
+        document.querySelectorAll(".dash-tab").forEach((t) => {
+          t.classList.toggle("active", t.getAttribute("data-dash-tab") === state.dashTab);
+        });
+
+        const tabCourses = document.getElementById("dashTabCourses");
+        const tabMissions = document.getElementById("dashTabMissions");
+        const tabProgress = document.getElementById("dashTabProgress");
+
+        if (tabCourses) tabCourses.style.display = state.dashTab === "courses" ? "block" : "none";
+        if (tabMissions) tabMissions.style.display = state.dashTab === "missions" ? "block" : "none";
+        if (tabProgress) tabProgress.style.display = state.dashTab === "progress" ? "block" : "none";
+
+        if (tabCourses) {
+          const rec = getRecommendedCourses();
+          tabCourses.innerHTML = rec.map((c) => renderCourseCardHTML(c, "متابعة الدرس والكويز")).join("");
+        }
+
+        if (tabMissions) {
+          document.querySelectorAll(".filter-btn").forEach((b) => {
+            b.classList.toggle("active", b.getAttribute("data-mission-filter") === state.missionFilter);
+          });
+
+          const listEl = document.getElementById("missionsList");
+          if (listEl) {
+            const filtered = state.missions.filter((m) => {
+              if (state.missionFilter === "active") return !m.done;
+              if (state.missionFilter === "done") return m.done;
+              return true;
+            });
+
+            listEl.innerHTML = filtered.map((m) => (
+              '<div class="mission-item ' + (m.done ? "done" : "") + '">' +
+                '<button type="button" class="mission-toggle" data-action="toggle-mission" data-mission="' + m.id + '">' +
+                  '<span class="mission-check">' + (m.done ? "✓" : "") + '</span>' +
+                  '<span>' +
+                    '<span class="mission-title">' + m.title + '</span>' +
+                    '<span class="mission-meta">' + m.category + '</span>' +
+                  '</span>' +
+                '</button>' +
+                '<span class="mission-xp">+' + m.xp + ' XP</span>' +
+              '</div>'
+            )).join("");
+          }
+        }
+
+        if (tabProgress) {
+          const xpEl = document.getElementById("progXpVal");
+          const lesEl = document.getElementById("progLessonsVal");
+          const misEl = document.getElementById("progMissionsVal");
+          const brkEl = document.getElementById("progressCoursesBreakdown");
+
+          if (xpEl) xpEl.textContent = String(state.xp);
+          if (lesEl) lesEl.textContent = String(state.completedLessons.length);
+          if (misEl) misEl.textContent = String(state.missions.filter((m) => m.done).length);
+
+          if (brkEl) {
+            brkEl.innerHTML = COURSES.map((c) => {
+              const pct = getCourseProgress(c);
+              return (
+                '<div style="margin-bottom:10px;">' +
+                  '<div class="course-top-row" style="margin-bottom:4px;">' +
+                    '<strong style="font-size:0.88rem;">' + c.title + '</strong>' +
+                    '<span class="course-pct">' + pct + '%</span>' +
+                  '</div>' +
+                  '<div class="progress-track" style="margin-bottom:0;"><div class="progress-fill" style="width:' + pct + '%;"></div></div>' +
+                '</div>'
+              );
+            }).join("");
+          }
+        }
+      }
+
+      function renderPlayer() {
+        const course = getCourseById(state.activeCourseId);
+        const lesson = getLessonByIds(course.id, state.activeLessonId);
+        state.activeCourseId = course.id;
+        state.activeLessonId = lesson.id;
+
+        const domEl = document.getElementById("playerCourseDomain");
+        const titleEl = document.getElementById("playerCourseTitle");
+        const descEl = document.getElementById("playerCourseDesc");
+        const barEl = document.getElementById("playerCourseBar");
+        const pillsEl = document.getElementById("playerLessonPills");
+        const lTitleEl = document.getElementById("playerLessonTitle");
+        const lSumEl = document.getElementById("playerLessonSummary");
+        const frameEl = document.getElementById("youtubePlayerFrame");
+        const stageEl = document.getElementById("videoStage");
+        const extLink = document.getElementById("externalYtLink");
+        const doneBtn = document.getElementById("toggleLessonDoneBtn");
+
+        if (domEl) domEl.textContent = course.domainLabel;
+        if (titleEl) titleEl.textContent = course.title;
+        if (descEl) descEl.textContent = course.desc;
+        if (barEl) barEl.style.width = getCourseProgress(course) + "%";
+
+        if (pillsEl) {
+          pillsEl.innerHTML = course.lessons.map((l, idx) => {
+            const isAct = l.id === lesson.id;
+            const isDone = state.completedLessons.includes(l.id);
+            return (
+              '<button type="button" class="lesson-pill ' + (isAct ? "active" : "") + " " + (isDone ? "completed" : "") + '" data-action="select-lesson" data-lesson="' + l.id + '">' +
+                (isDone ? "✓ " : "") + "درس " + (idx + 1) + ": " + l.title +
+              '</button>'
+            );
+          }).join("");
+        }
+
+        if (lTitleEl) lTitleEl.textContent = lesson.title;
+        if (lSumEl) lSumEl.textContent = lesson.summary;
+
+        const embedUrl = "https://www.youtube.com/embed/" + encodeURIComponent(lesson.ytId) + "?rel=0&modestbranding=1";
+        if (frameEl && frameEl.getAttribute("data-yt") !== lesson.ytId) {
+          frameEl.setAttribute("data-yt", lesson.ytId);
+          frameEl.src = embedUrl;
+        }
+
+        if (stageEl) {
+          stageEl.classList.toggle("theater", Boolean(state.theaterMode));
+        }
+
+        if (extLink) {
+          extLink.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(lesson.ytId);
+        }
+
+        if (doneBtn) {
+          const isDone = state.completedLessons.includes(lesson.id);
+          doneBtn.textContent = isDone ? "✓ مكتمل (إلغاء)" : "✓ تحديد كمكتمل";
+        }
+
+        const qBox = document.getElementById("quizQuestionsContainer");
+        const resBox = document.getElementById("quizResultBox");
+        if (resBox) {
+          resBox.className = "auth-feedback";
+          resBox.textContent = "";
+        }
+
+        if (qBox) {
+          const lessonAns = quizSelections[lesson.id] || {};
+          qBox.innerHTML = lesson.quiz.map((item, qIdx) => {
+            const picked = lessonAns[qIdx];
+            return (
+              '<div class="quiz-q-card">' +
+                '<div class="quiz-q-title">' + (qIdx + 1) + ". " + item.q + '</div>' +
+                item.opts.map((optText, oIdx) => {
+                  const isPicked = picked === oIdx;
+                  return (
+                    '<button type="button" class="quiz-opt-btn ' + (isPicked ? "picked" : "") + '" data-action="pick-quiz" data-q="' + qIdx + '" data-o="' + oIdx + '">' +
+                      optText +
+                    '</button>'
+                  );
+                }).join("") +
+              '</div>'
+            );
+          }).join("");
+        }
+      }
+
+      function renderChat() {
+        const box = document.getElementById("chatBox");
+        if (!box) return;
+        box.innerHTML = state.chat.map((m) => (
+          '<div class="msg-bubble ' + (m.role === "user" ? "msg-user" : "msg-ai") + '">' +
+            escapeHtml(m.text) +
+          '</div>'
+        )).join("");
+        box.scrollTop = box.scrollHeight;
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function renderAll() {
+        renderTopAndAccount();
+        renderDomains();
+        renderSelectedCourses();
+        renderDashboard();
+        renderAllCourses();
+        if (state.view === "player") renderPlayer();
+        renderChat();
+      }
+
+      function generateSmartReply(promptText) {
+        const raw = (promptText || "").trim();
+        const lower = raw.toLowerCase();
+        const isEnglish = /^[a-z0-9\s\?\.,!'"-]+$/i.test(raw) && !/[\u0600-\u06FF]/.test(raw);
+
+        if (isEnglish) {
+          if (lower.includes("ai") || lower.includes("code") || lower.includes("program") || lower.includes("learn")) {
+            return (
+              "Smart Path Roadmap (AI & Coding):\n" +
+              "1. Build core logic & variables first (30–45 mins daily).\n" +
+              "2. Watch Arabic/English concept lessons and solve the 4-question quiz after each video.\n" +
+              "3. Complete practical missions to earn XP and build real projects."
+            );
+          }
+          if (lower.includes("market") || lower.includes("sell") || lower.includes("freelance")) {
+            return (
+              "Marketing, Sales & Freelancing Tip:\n" +
+              "1. Define a clear target audience and their main problem.\n" +
+              "2. Present a clear value offer and proof of work.\n" +
+              "3. Follow up consistently and measure conversion results."
+            );
+          }
+          return (
+            "Smart Path Advisor:\n" +
+            "You currently have " + state.xp + " XP across " + state.selectedDomains.length + " selected domains. " +
+            "Pick a course video, complete its 4-question quiz, and check off practical missions to level up steadily."
+          );
+        }
+
+        if (lower.includes("خطة") || lower.includes("مذاكرة") || lower.includes("جدول")) {
+          return (
+            "خطة مذاكرة أسبوعية عملية:\n" +
+            "• الأيام 1–2: مشاهدة فيديو عربي أساسي + حل الكويز المكون من 4 أسئلة لتثبيت المفاهيم.\n" +
+            "• الأيام 3–5: تنفيذ مهمتين عمليتين من تبويب «المهام العملية» وتدوين أهم النقاط.\n" +
+            "• الأيام 6–7: مراجعة سريعة وربط ما تعلمته بمثال أو تطبيق عملي صغير."
+          );
+        }
+
+        if (lower.includes("تسويق") || lower.includes("بيع") || lower.includes("عمل حر") || lower.includes("تجارة")) {
+          return (
+            "دليل سريع للتسويق والبيع والعمل الحر:\n" +
+            "1. حدّد العميل المستهدف بدقة واعرف المشكلة التي يعاني منها.\n" +
+            "2. قدّم عرض قيمة واضح ومباشر يوضح النتيجة العملية للعميل.\n" +
+            "3. جهّز نماذج أعمال أو عروض تجريبية واطلب آراء وتقييمات مستمرة."
+          );
+        }
+
+        if (lower.includes("طب") || lower.includes("صح") || lower.includes("تشريح") || lower.includes("فسيولوجي")) {
+          return (
+            "نصيحة للعلوم الصحية والطب:\n" +
+            "• ابدأ بالمصطلحات الأساسية والوضع التشريحي لفهم الاتجاهات والمواقع بدقة.\n" +
+            "• اربط بين تركيب العضو (التشريح) ووظيفته (الفسيولوجي) لتسهيل الحفظ والفهم.\n" +
+            "• راجع عبر الأسئلة القصيرة والكويزات بعد كل درس."
+          );
+        }
+
+        if (lower.includes("برمجة") || lower.includes("ذكاء") || lower.includes("sql") || lower.includes("قواعد")) {
+          return (
+            "نصيحة للبرمجة والذكاء الاصطناعي وقواعد البيانات:\n" +
+            "• افهم الفكرة الأساسية أولًا قبل تعقيد الأدوات.\n" +
+            "• طبّق كل مفهوم بمثال عملي أو استعلام بسيط واكتب أوامرك بوضوح.\n" +
+            "• أكمل دروس الفيديو وحل الكويزات لرفع نقاط XP وتطوير مستواك."
+          );
+        }
+
+        return (
+          "بناءً على تقدمك في مسارك الذكي (" + state.xp + " XP و" + state.selectedDomains.length + " مجالات مختارة):\n" +
+          "أنصحك بفتح دورة من «دوراتي» أو «الدورات»، مشاهدة الفيديو التعليمي، حل الكويز المكون من 4 أسئلة، ثم إنجاز مهمة عملية جديدة اليوم."
+        );
+      }
+
+      function waitForServer(timeoutMs = 5000) {
+        return new Promise((resolve) => {
+          if (window.SmartPathFirebaseServer) {
+            resolve(window.SmartPathFirebaseServer);
+            return;
+          }
+          const t0 = Date.now();
+          const id = setInterval(() => {
+            if (window.SmartPathFirebaseServer) {
+              clearInterval(id);
+              resolve(window.SmartPathFirebaseServer);
+            } else if (Date.now() - t0 >= timeoutMs) {
+              clearInterval(id);
+              resolve(null);
+            }
+          }, 120);
+        });
+      }
+
+      function handleAction(action, el) {
+        if (!action) return;
+
+        if (action === "go") {
+          setView(el.getAttribute("data-view"));
+          return;
+        }
+
+        if (action === "auth-mode") {
+          const mode = el.getAttribute("data-mode") || "login";
+          state.authMode = mode;
+          const loginBtn = document.getElementById("tabLoginBtn");
+          const regBtn = document.getElementById("tabRegisterBtn");
+          const nameGrp = document.getElementById("nameFieldGroup");
+          const subBtn = document.getElementById("authSubmitBtn");
+
+          if (loginBtn) loginBtn.classList.toggle("active", mode === "login");
+          if (regBtn) regBtn.classList.toggle("active", mode === "register");
+          if (nameGrp) nameGrp.style.display = mode === "register" ? "block" : "none";
+          if (subBtn) {
+            subBtn.disabled = false;
+            subBtn.textContent = mode === "register" ? "إنشاء حساب جديد" : "تسجيل الدخول";
+          }
+          clearAuthFeedback();
+          return;
+        }
+
+        if (action === "logout") {
+          state.user = { name: "", email: "", loggedIn: false };
+          saveState(false);
+          if (window.SmartPathFirebaseServer && typeof window.SmartPathFirebaseServer.logoutServer === "function") {
+            window.SmartPathFirebaseServer.logoutServer().catch(() => {});
+          }
+          showToast("تم تسجيل الخروج");
+          setView("auth");
+          return;
+        }
+
+        if (!isAuthenticated()) {
+          setView("auth");
+          return;
+        }
+
+        if (action === "toggle-domain") {
+          const domId = el.getAttribute("data-domain");
+          if (!domId) return;
+          if (state.selectedDomains.includes(domId)) {
+            if (state.selectedDomains.length > 1) {
+              state.selectedDomains = state.selectedDomains.filter((id) => id !== domId);
+            } else {
+              showToast("يجب اختيار مجال واحد على الأقل");
+              return;
+            }
+          } else {
+            state.selectedDomains.push(domId);
+          }
+          saveState(true);
+          renderDomains();
+          renderTopAndAccount();
+          return;
+        }
+
+        if (action === "submit-interests") {
+          if (!state.selectedDomains.length) {
+            state.selectedDomains = [DOMAINS[0].id];
+          }
+          saveState(true);
+          setView("selected");
+          return;
+        }
+
+        if (action === "open-course") {
+          const cid = el.getAttribute("data-course");
+          const course = getCourseById(cid);
+          setView("player", { courseId: course.id, lessonId: course.lessons[0].id });
+          return;
+        }
+
+        if (action === "select-lesson") {
+          const lid = el.getAttribute("data-lesson");
+          state.activeLessonId = lid;
+          saveState(false);
+          renderPlayer();
+          return;
+        }
+
+        if (action === "fullscreen-video") {
+          const stage = document.getElementById("videoStage");
+          const iframe = document.getElementById("youtubePlayerFrame");
+          const target = iframe || stage;
+          if (target && typeof target.requestFullscreen === "function") {
+            target.requestFullscreen().catch(() => {
+              state.theaterMode = !state.theaterMode;
+              renderPlayer();
+            });
+          } else {
+            state.theaterMode = !state.theaterMode;
+            renderPlayer();
+          }
+          return;
+        }
+
+        if (action === "theater-video") {
+          state.theaterMode = !state.theaterMode;
+          renderPlayer();
+          return;
+        }
+
+        if (action === "toggle-current-lesson") {
+          const lesson = getLessonByIds(state.activeCourseId, state.activeLessonId);
+          const idx = state.completedLessons.indexOf(lesson.id);
+          if (idx === -1) {
+            state.completedLessons.push(lesson.id);
+            state.xp += 20;
+            showToast("تم تحديد الدرس كمكتمل (+20 XP)");
+          } else {
+            state.completedLessons.splice(idx, 1);
+            state.xp = Math.max(0, state.xp - 20);
+            showToast("تم إلغاء اكتمال الدرس");
+          }
+          saveState(true);
+          renderTopAndAccount();
+          renderPlayer();
+          return;
+        }
+
+        if (action === "pick-quiz") {
+          const qIdx = Number(el.getAttribute("data-q"));
+          const oIdx = Number(el.getAttribute("data-o"));
+          const lesson = getLessonByIds(state.activeCourseId, state.activeLessonId);
+          if (!quizSelections[lesson.id]) quizSelections[lesson.id] = {};
+          quizSelections[lesson.id][qIdx] = oIdx;
+
+          const card = el.closest(".quiz-q-card");
+          if (card) {
+            card.querySelectorAll(".quiz-opt-btn").forEach((btn, i) => {
+              btn.classList.remove("picked", "correct-ans", "wrong-ans");
+              if (i === oIdx) btn.classList.add("picked");
+            });
+          }
+          return;
+        }
+
+        if (action === "submit-quiz") {
+          const lesson = getLessonByIds(state.activeCourseId, state.activeLessonId);
+          const picks = quizSelections[lesson.id] || {};
+          const totalQ = lesson.quiz.length;
+          let correctCount = 0;
+
+          const qCards = document.querySelectorAll("#quizQuestionsContainer .quiz-q-card");
+          lesson.quiz.forEach((item, qIdx) => {
+            const chosen = picks[qIdx];
+            if (chosen === item.ans) correctCount++;
+
+            const card = qCards[qIdx];
+            if (card) {
+              const opts = card.querySelectorAll(".quiz-opt-btn");
+              opts.forEach((optBtn, oIdx) => {
+                optBtn.classList.remove("picked", "correct-ans", "wrong-ans");
+                if (oIdx === item.ans) optBtn.classList.add("correct-ans");
+                else if (oIdx === chosen) optBtn.classList.add("wrong-ans");
+              });
+            }
+          });
+
+          const resBox = document.getElementById("quizResultBox");
+          if (resBox) {
+            const earnedXp = correctCount * 10;
+            state.xp += earnedXp;
+            if (correctCount >= Math.ceil(totalQ / 2) && !state.completedLessons.includes(lesson.id)) {
+              state.completedLessons.push(lesson.id);
+            }
+            saveState(true);
+            renderTopAndAccount();
+
+            resBox.className = "auth-feedback show " + (correctCount >= 3 ? "ok" : "err");
+            resBox.textContent =
+              "نتيجتك: " + correctCount + " من " + totalQ + " إجابات صحيحة" +
+              (earnedXp > 0 ? " • كسبت +" + earnedXp + " XP" : "");
+          }
+          return;
+        }
+
+        if (action === "dash-tab") {
+          state.dashTab = el.getAttribute("data-tab") || "courses";
+          saveState(false);
+          renderDashboard();
+          return;
+        }
+
+        if (action === "mission-filter") {
+          state.missionFilter = el.getAttribute("data-filter") || "all";
+          renderDashboard();
+          return;
+        }
+
+        if (action === "toggle-mission") {
+          const mid = el.getAttribute("data-mission");
+          const mission = state.missions.find((m) => m.id === mid);
+          if (!mission) return;
+          mission.done = !mission.done;
+          if (mission.done) {
+            state.xp += mission.xp;
+            showToast("أحسنت! أتممت المهمة (+" + mission.xp + " XP)");
+          } else {
+            state.xp = Math.max(0, state.xp - mission.xp);
+          }
+          saveState(true);
+          renderTopAndAccount();
+          renderDashboard();
+          return;
+        }
+
+        if (action === "quick-ai") {
+          const qText = el.getAttribute("data-prompt");
+          if (!qText) return;
+          state.chat.push({ role: "user", text: qText });
+          state.chat.push({ role: "ai", text: generateSmartReply(qText) });
+          saveState(false);
+          renderChat();
+        }
+      }
+
+      document.addEventListener("click", function (e) {
+        const actionEl = e.target.closest("[data-action]");
+        if (!actionEl) return;
+        const action = actionEl.getAttribute("data-action");
+        if (actionEl.tagName === "A") {
+          if (!isAuthenticated()) {
+            e.preventDefault();
+            setView("auth");
+          }
+          return;
+        }
+        handleAction(action, actionEl);
+      });
+
+      document.addEventListener("submit", async function (e) {
+        if (e.target && e.target.id === "authForm") {
+          e.preventDefault();
+          const nameInput = document.getElementById("authNameInput");
+          const emailInput = document.getElementById("authEmailInput");
+          const passInput = document.getElementById("authPassInput");
+          const subBtn = document.getElementById("authSubmitBtn");
+
+          const nameVal = ((nameInput && nameInput.value) || "").trim();
+          const emailVal = ((emailInput && emailInput.value) || "").trim().toLowerCase();
+          const passVal = ((passInput && passInput.value) || "").trim();
+
+          if (!emailVal || !passVal) {
+            showAuthError("يرجى إدخال البريد الإلكتروني وكلمة المرور.");
+            return;
+          }
+
+          clearAuthFeedback();
+          if (subBtn) {
+            subBtn.disabled = true;
+            subBtn.textContent = "جاري التحقق من سيرفر Firebase...";
+          }
+
+          try {
+            const server = await waitForServer(5000);
+            if (!server) {
+              showAuthError("تعذر الاتصال بسيرفر Firebase. تحقق من الاتصال بالإنترنت وأعد المحاولة.");
+              return;
+            }
+
+            const res = state.authMode === "register"
+              ? await server.registerWithEmail(nameVal, emailVal, passVal)
+              : await server.loginWithEmail(emailVal, passVal);
+
+            if (!res || !res.ok) {
+              state.user = { name: "", email: "", loggedIn: false };
+              saveState(false);
+              showAuthError((res && res.message) || "هذا البريد الإلكتروني غير مسجل أو كلمة المرور غير صحيحة.");
+              return;
+            }
+
+            state.user = {
+              name: res.name || nameVal || emailVal.split("@")[0],
+              email: res.email || emailVal,
+              loggedIn: true
+            };
+
+            if (res.remoteState && typeof res.remoteState === "object") {
+              if (typeof res.remoteState.xp === "number") {
+                state.xp = Math.max(state.xp, res.remoteState.xp);
+              }
+              if (Array.isArray(res.remoteState.selectedDomains) && res.remoteState.selectedDomains.length) {
+                state.selectedDomains = res.remoteState.selectedDomains;
+              }
+              if (Array.isArray(res.remoteState.completedLessons)) {
+                state.completedLessons = Array.from(new Set([...state.completedLessons, ...res.remoteState.completedLessons]));
+              }
+            }
+
+            saveState(false);
+            renderTopAndAccount();
+            showAuthOk(
+              state.authMode === "register"
+                ? "تم إنشاء الحساب وتسجيل الإيميل على سيرفر Firebase بنجاح!"
+                : "تم التحقق من الحساب على سيرفر Firebase بنجاح!"
+            );
+
+            setTimeout(() => setView("dashboard"), 200);
+          } finally {
+            if (subBtn) {
+              subBtn.disabled = false;
+              subBtn.textContent = state.authMode === "register" ? "إنشاء حساب جديد" : "تسجيل الدخول";
+            }
+          }
+          return;
+        }
+
+        if (e.target && e.target.id === "aiChatForm") {
+          e.preventDefault();
+          if (!isAuthenticated()) {
+            setView("auth");
+            return;
+          }
+          const input = document.getElementById("aiChatInput");
+          if (!input) return;
+          const text = input.value.trim();
+          if (!text) return;
+
+          state.chat.push({ role: "user", text });
+          state.chat.push({ role: "ai", text: generateSmartReply(text) });
+          input.value = "";
+          saveState(false);
+          renderChat();
+        }
+      });
+
+      window.SmartPathApp = {
+        onServerSession(user, docData) {
+          state.user.loggedIn = true;
+          state.user.email = user.email;
+          state.user.name = (docData && docData.name) || user.displayName || user.email.split("@")[0];
+          if (docData && docData.state) {
+            if (typeof docData.state.xp === "number") {
+              state.xp = Math.max(state.xp, docData.state.xp);
+            }
+            if (Array.isArray(docData.state.completedLessons)) {
+              state.completedLessons = Array.from(new Set([...state.completedLessons, ...docData.state.completedLessons]));
+            }
+          }
+          saveState(false);
+          renderTopAndAccount();
+          if (state.view === "auth") {
+            setView("dashboard");
+          }
+        },
+        onServerSignedOut() {
+          if (state.user.loggedIn) {
+            state.user = { name: "", email: "", loggedIn: false };
+            saveState(false);
+            if (!PUBLIC_VIEWS.includes(state.view)) {
+              setView("auth");
+            } else {
+              renderTopAndAccount();
+            }
+          }
+        }
+      };
+
+      const initialView = isAuthenticated() ? state.view : "auth";
+      setView(initialView);
+    })();
+  </script>
+</body>
+</html>
